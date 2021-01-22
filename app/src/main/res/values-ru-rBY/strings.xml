@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="loading_quiz">Загрузка…</string>
+    <string name="question">Вопрос</string>
+    <string name="fetching_data">Полученные данные</string>
+    <string name="verifying_answer">Проверить ответ</string>
+    <string name="next_question">Следующий вопрос</string>
+    <string name="results">Результаты</string>
+    <string name="wrong_answers">Неправильные ответы</string>
+    <string name="questions_missed">Пропущенные вопросы</string>
+    <string name="go_to_home">На главную</string>
+    <string name="initializing">Инициализация…</string>
+    <string name="view_quiz">Показать викторину</string>
+    <string name="difficulty">Сложность</string>
+    <string name="your_last_score">Ваш последний результат</string>
+    <string name="start_quiz">Начать викторину</string>
+    <string name="correct_answers">Правильные ответы</string>
+    <string name="total_questions">Всего вопросов</string>
+    <string name="checking_user_account">Проверка профиля...</string>
+    <string name="creating_account">Создание профиля...</string>
+    <string name="account_created">Профиль создан...</string>
+    <string name="logged_account">Вход выполнен...</string>
+</resources>
