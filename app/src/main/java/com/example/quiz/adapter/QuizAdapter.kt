@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.quiz.R
 import com.example.quiz.model.Quiz
 
@@ -44,8 +45,19 @@ class QuizAdapter : RecyclerView.Adapter<QuizAdapter.ViewHolder> () {
 
         fun bind(quiz: Quiz) {
             name.text = quiz.name
-            desc.text = quiz.desc
             difficulty.text = quiz.level
+
+            if (quiz.desc.length < 100) {
+                desc.text = quiz.desc
+            } else {
+                desc.text = quiz.desc.substring(100) + "..."
+            }
+
+            Glide.with(itemView.context)
+                .load(quiz.image)
+                .centerCrop()
+                .placeholder(R.drawable.placeholder_image)
+                .into(image)
         }
     }
 }
