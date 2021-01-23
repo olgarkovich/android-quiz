@@ -1,20 +1,21 @@
-package com.example.quiz
+package com.example.quiz.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.quiz.adapter.QuizAdapter
+import com.example.quiz.R
+import com.example.quiz.viewmodel.QuizListViewModel
 
 class ListFragment : Fragment() {
 
     private lateinit var list: RecyclerView
-    private lateinit var quizViewModel: QuizViewModel
+    private lateinit var quizListViewModel: QuizListViewModel
     private lateinit var adapter: QuizAdapter
 
     override fun onCreateView(
@@ -39,8 +40,8 @@ class ListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        quizViewModel = ViewModelProvider(requireActivity()).get(QuizViewModel::class.java)
-        quizViewModel.getQuizModelData().observe(viewLifecycleOwner,
+        quizListViewModel = ViewModelProvider(requireActivity()).get(QuizListViewModel::class.java)
+        quizListViewModel.getQuizListData().observe(viewLifecycleOwner,
             { quiz -> adapter.setQuizList(quiz)
             adapter.notifyDataSetChanged()})
     }

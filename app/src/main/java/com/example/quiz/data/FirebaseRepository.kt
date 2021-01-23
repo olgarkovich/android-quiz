@@ -1,6 +1,6 @@
-package com.example.quiz
+package com.example.quiz.data
 
-import android.content.Context
+import com.example.quiz.model.Quiz
 import com.google.firebase.firestore.FirebaseFirestore
 import java.lang.Exception
 

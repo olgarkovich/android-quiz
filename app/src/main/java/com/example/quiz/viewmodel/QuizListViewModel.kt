@@ -1,11 +1,13 @@
-package com.example.quiz
+package com.example.quiz.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.quiz.data.FirebaseRepository
+import com.example.quiz.model.Quiz
 import java.lang.Exception
 
-class QuizViewModel : ViewModel(), FirebaseRepository.OnFirestoreTaskComplete {
+class QuizListViewModel : ViewModel(), FirebaseRepository.OnFirestoreTaskComplete {
 
     private val listData: MutableLiveData<List<Quiz>> = MutableLiveData()
     private val firebaseRepository = FirebaseRepository(this)
@@ -14,7 +16,7 @@ class QuizViewModel : ViewModel(), FirebaseRepository.OnFirestoreTaskComplete {
         firebaseRepository.getQuizData()
     }
 
-    fun getQuizModelData(): LiveData<List<Quiz>> {
+    fun getQuizListData(): LiveData<List<Quiz>> {
         return listData
     }
     override fun quizListDataAdd(quiz: List<Quiz>) {
@@ -24,6 +26,4 @@ class QuizViewModel : ViewModel(), FirebaseRepository.OnFirestoreTaskComplete {
     override fun onError(exception: Exception?) {
 
     }
-
-
 }
