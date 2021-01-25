@@ -11,21 +11,38 @@ import com.bumptech.glide.Glide
 import com.example.quiz.R
 import com.example.quiz.model.Quiz
 
-class QuizAdapter : RecyclerView.Adapter<QuizAdapter.ViewHolder> () {
+class QuizAdapter : RecyclerView.Adapter<QuizAdapter.QuizViewHolder> () {
 
     private var list: List<Quiz> = emptyList()
+    private var listener: OnItemClickListener? = null
 
     fun setQuizList(quiz: List<Quiz>) {
         list = quiz
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuizViewHolder {
+        val itemView: View = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
+        return QuizViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: QuizViewHolder, position: Int) {
+        val currentQuiz = list[position]
+        holder.name.text = currentQuiz.name
+        holder.difficulty.text = currentQuiz.level
+
+        if (currentQuiz.desc.length < 100) {
+            holder.desc.text = currentQuiz.desc
+        } else {
+            holder.desc.text = currentQuiz.desc.substring(100) + "..."
+        }
+
+        Glide.with(holder.itemView.context)
+            .load(currentQuiz.image)
+            .centerCrop()
+            .placeholder(R.drawable.placeholder_image)
+            .into(holder.image)
     }
+
     override fun getItemCount(): Int {
         return if (list.isNotEmpty()) {
             list.size
@@ -34,30 +51,30 @@ class QuizAdapter : RecyclerView.Adapter<QuizAdapter.ViewHolder> () {
         }
     }
 
-    private fun getItem(position: Int) : Quiz = list[position]
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val name: TextView = itemView.findViewById(R.id.list_title)
-        private val desc: TextView = itemView.findViewById(R.id.list_desc)
-        private val difficulty: TextView = itemView.findViewById(R.id.list_difficulty)
-        private val image: ImageView = itemView.findViewById(R.id.list_image)
+    inner class QuizViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val name: TextView = itemView.findViewById(R.id.list_title)
+        val desc: TextView = itemView.findViewById(R.id.list_desc)
+        val difficulty: TextView = itemView.findViewById(R.id.list_difficulty)
+        val image: ImageView = itemView.findViewById(R.id.list_image)
         private val button: Button = itemView.findViewById(R.id.list_btn)
 
-        fun bind(quiz: Quiz) {
-            name.text = quiz.name
-            difficulty.text = quiz.level
-
-            if (quiz.desc.length < 100) {
-                desc.text = quiz.desc
-            } else {
-                desc.text = quiz.desc.substring(100) + "..."
+        init {
+            button.setOnClickListener {
+                listener?.let { listener ->
+                    val position: Int = adapterPosition
+                    if (position in 0..itemCount) {
+                        listener.onItemClick(position)
+                    }
+                }
             }
-
-            Glide.with(itemView.context)
-                .load(quiz.image)
-                .centerCrop()
-                .placeholder(R.drawable.placeholder_image)
-                .into(image)
         }
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.listener = listener
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
     }
 }

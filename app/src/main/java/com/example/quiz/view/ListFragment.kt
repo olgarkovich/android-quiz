@@ -5,7 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.ProgressBar
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quiz.adapter.QuizAdapter
@@ -14,9 +19,13 @@ import com.example.quiz.viewmodel.QuizListViewModel
 
 class ListFragment : Fragment() {
 
+    private lateinit var navController: NavController
     private lateinit var list: RecyclerView
     private lateinit var quizListViewModel: QuizListViewModel
     private lateinit var adapter: QuizAdapter
+    private lateinit var progressBar: ProgressBar
+    private lateinit var fadeIn: Animation
+    private lateinit var fadeOut: Animation
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,21 +38,37 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        navController = Navigation.findNavController(view)
+        progressBar = view.findViewById(R.id.progress_list)
         list = view.findViewById(R.id.list)
+        list.layoutManager = LinearLayoutManager(requireContext())
         adapter = QuizAdapter()
 
-        list.layoutManager = LinearLayoutManager(requireContext())
         list.setHasFixedSize(true)
         list.adapter = adapter
+
+        fadeIn = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+        fadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+
+        adapter.setOnItemClickListener(object :
+            QuizAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                val action = ListFragmentDirections.actionListFragmentToDetailFragment(position)
+                navController.navigate(action)
+            }
+        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         quizListViewModel = ViewModelProvider(requireActivity()).get(QuizListViewModel::class.java)
-        quizListViewModel.getQuizListData().observe(viewLifecycleOwner,
-            { quiz -> adapter.setQuizList(quiz)
-            adapter.notifyDataSetChanged()})
-    }
+        quizListViewModel.getQuizListData().observe(viewLifecycleOwner, { quiz ->
+                list.startAnimation(fadeIn)
+                progressBar.startAnimation(fadeOut)
 
+                adapter.setQuizList(quiz)
+                adapter.notifyDataSetChanged()
+        })
+    }
 }
