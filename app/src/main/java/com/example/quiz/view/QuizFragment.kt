@@ -66,8 +66,6 @@ class QuizFragment : Fragment(), View.OnClickListener {
 
         if (firebaseAuth.currentUser != null) {
             currentUser = firebaseAuth.currentUser!!.uid
-        } else {
-
         }
 
         closeButton = view.findViewById(R.id.quiz_close_btn)
@@ -89,19 +87,14 @@ class QuizFragment : Fragment(), View.OnClickListener {
 
         firebaseFirestore = FirebaseFirestore.getInstance()
         firebaseFirestore.collection(QUIZ_LIST)
-
             .document(quizId)
             .collection(QUESTIONS)
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     questions = task.result?.toObjects(Question::class.java)!!
-                    if (questions.size > 0) {
-                        pickQuestion()
-                        loadUI()
-                    } else {
-                        quizTitle.text = getString(R.string.coming_soon)
-                    }
+
+                    verifyQuestions()
                 } else {
                     quizTitle.text = getString(R.string.error_loading)
                 }
@@ -114,6 +107,15 @@ class QuizFragment : Fragment(), View.OnClickListener {
         nextButton.setOnClickListener(this)
     }
 
+    private fun verifyQuestions() {
+        if (questions.size > 0) {
+            pickQuestion()
+            loadUI()
+        } else {
+            quizTitle.text = getString(R.string.coming_soon)
+        }
+    }
+
     private fun loadUI() {
         quizTitle.text = quizName
         questionText.text = getString(R.string.loading_the_first)
@@ -123,9 +125,7 @@ class QuizFragment : Fragment(), View.OnClickListener {
     }
 
     private fun loadQuestion(questionNumber: Int) {
-
         questionsNumber.text = questionNumber.toString()
-
         questionText.text = questionsToAnswer[questionNumber - 1].question
         optionOne.text = questionsToAnswer[questionNumber - 1].option1
         optionTwo.text = questionsToAnswer[questionNumber - 1].option2
@@ -214,7 +214,6 @@ class QuizFragment : Fragment(), View.OnClickListener {
         results[WRONG] = wrongCounter
         results[MISSED] = missedCounter
 
-
         firebaseFirestore.collection(QUIZ_LIST)
             .document(quizId)
             .collection(RESULTS)
@@ -229,7 +228,6 @@ class QuizFragment : Fragment(), View.OnClickListener {
                 } else {
                     quizTitle.text = task.exception?.message
                 }
-
             }
     }
 
@@ -249,24 +247,30 @@ class QuizFragment : Fragment(), View.OnClickListener {
 
     private fun answerSelected(btn: Button) {
         if (answerEnable) {
-            if (questionsToAnswer[currentQuestion - 1].answer == btn.text) {
-                correctCounter++
-                feedBack.text = getString(R.string.correct)
-
-                btn.setBackgroundColor(resources.getColor(R.color.colorPrimary, null))
-                btn.setTextColor(resources.getColor(R.color.colorDark, null))
-            } else {
-                wrongCounter++
-                feedBack.text = getString(R.string.wrong_right, questionsToAnswer[currentQuestion - 1].answer)
-
-                btn.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
-                btn.setTextColor(resources.getColor(R.color.colorDark, null))
-            }
-            answerEnable = false
-            timer.cancel()
-            showNextBtn()
+            verifyAnswer(btn)
         }
     }
+
+    private fun verifyAnswer(btn: Button) {
+        if (questionsToAnswer[currentQuestion - 1].answer == btn.text) {
+            correctCounter++
+            feedBack.text = getString(R.string.correct)
+
+            btn.setBackgroundColor(resources.getColor(R.color.colorPrimary, null))
+            btn.setTextColor(resources.getColor(R.color.colorDark, null))
+        } else {
+            wrongCounter++
+            feedBack.text =
+                getString(R.string.wrong_right, questionsToAnswer[currentQuestion - 1].answer)
+
+            btn.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+            btn.setTextColor(resources.getColor(R.color.colorDark, null))
+        }
+        answerEnable = false
+        timer.cancel()
+        showNextBtn()
+    }
+
 
     private fun showNextBtn() {
         if (currentQuestion - 1 == totalQuestions) {

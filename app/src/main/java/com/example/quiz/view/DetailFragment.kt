@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.example.quiz.*
 import com.example.quiz.viewmodel.QuizListViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
 class DetailFragment : Fragment(), View.OnClickListener {
@@ -105,19 +106,21 @@ class DetailFragment : Fragment(), View.OnClickListener {
                     if (task.isSuccessful) {
                         val results = task.result
 
-                        if (results != null && results.exists()) {
-
-                            val right = results.getLong(CORRECT)!!
-                            val wrong = results.getLong(WRONG)!!
-                            val no = results.getLong(MISSED)!!
-
-                            val percent = right.toFloat() / (right + wrong + no) * 100
-                            detailScore.text = getString(R.string.percent, percent.toInt().toString())
-                        } else {
-
-                        }
+                        getResults(results)
                     }
                 }
+        }
+    }
+
+    private fun getResults(results: DocumentSnapshot?) {
+        if (results != null && results.exists()) {
+
+            val right = results.getLong(CORRECT)!!
+            val wrong = results.getLong(WRONG)!!
+            val no = results.getLong(MISSED)!!
+
+            val percent = right.toFloat() / (right + wrong + no) * 100
+            detailScore.text = getString(R.string.percent, percent.toInt().toString())
         }
     }
 

@@ -49,8 +49,6 @@ class ResultFragment : Fragment() {
 
         if (firebaseAuth.currentUser != null) {
             currentUser = firebaseAuth.currentUser!!.uid
-        } else {
-
         }
 
         firebaseFirestore = FirebaseFirestore.getInstance()
@@ -78,17 +76,23 @@ class ResultFragment : Fragment() {
                 if (task.isSuccessful) {
                     val results: DocumentSnapshot = task.result!!
 
-                    val right = results.getLong(CORRECT)!!
-                    val wrong = results.getLong(WRONG)!!
-                    val no = results.getLong(MISSED)!!
-                    correctCounter.text = right.toString()
-                    wrongCounter.text = wrong.toString()
-                    missedCounter.text = no.toString()
-
-                    val percent = right.toFloat() / (right + wrong + no) * 100
-                    resultPercent.text = getString(R.string.percent, percent.toInt().toString())
-                    progress.progress = percent.toInt()
+                    showResults(results)
                 }
             }
+    }
+
+    private fun showResults(results: DocumentSnapshot) {
+
+        val right = results.getLong(CORRECT)!!
+        val wrong = results.getLong(WRONG)!!
+        val no = results.getLong(MISSED)!!
+
+        correctCounter.text = right.toString()
+        wrongCounter.text = wrong.toString()
+        missedCounter.text = no.toString()
+
+        val percent = right.toFloat() / (right + wrong + no) * 100
+        resultPercent.text = getString(R.string.percent, percent.toInt().toString())
+        progress.progress = percent.toInt()
     }
 }
