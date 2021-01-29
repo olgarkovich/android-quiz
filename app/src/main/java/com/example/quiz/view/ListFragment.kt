@@ -19,9 +19,7 @@ import com.example.quiz.viewmodel.QuizListViewModel
 
 class ListFragment : Fragment() {
 
-    private lateinit var navController: NavController
-    private lateinit var list: RecyclerView
-    private lateinit var quizListViewModel: QuizListViewModel
+    private lateinit var quizList: RecyclerView
     private lateinit var adapter: QuizAdapter
     private lateinit var progressBar: ProgressBar
     private lateinit var fadeIn: Animation
@@ -38,14 +36,14 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navController = Navigation.findNavController(view)
+        val navController = Navigation.findNavController(view)
         progressBar = view.findViewById(R.id.progress_list)
-        list = view.findViewById(R.id.list)
-        list.layoutManager = LinearLayoutManager(requireContext())
+        quizList = view.findViewById(R.id.list)
+        quizList.layoutManager = LinearLayoutManager(requireContext())
         adapter = QuizAdapter()
 
-        list.setHasFixedSize(true)
-        list.adapter = adapter
+        quizList.setHasFixedSize(true)
+        quizList.adapter = adapter
 
         fadeIn = AnimationUtils.loadAnimation(context, R.anim.fade_in)
         fadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
@@ -62,9 +60,9 @@ class ListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        quizListViewModel = ViewModelProvider(requireActivity()).get(QuizListViewModel::class.java)
+        val quizListViewModel = ViewModelProvider(requireActivity()).get(QuizListViewModel::class.java)
         quizListViewModel.getQuizListData().observe(viewLifecycleOwner, { quiz ->
-                list.startAnimation(fadeIn)
+                quizList.startAnimation(fadeIn)
                 progressBar.startAnimation(fadeOut)
 
                 adapter.setQuizList(quiz)

@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.quiz.R
 import com.example.quiz.model.Quiz
 
-class QuizAdapter : RecyclerView.Adapter<QuizAdapter.QuizViewHolder> () {
+class QuizAdapter : RecyclerView.Adapter<QuizAdapter.QuizViewHolder>() {
 
     private var list: List<Quiz> = emptyList()
     private var listener: OnItemClickListener? = null
@@ -21,7 +21,8 @@ class QuizAdapter : RecyclerView.Adapter<QuizAdapter.QuizViewHolder> () {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuizViewHolder {
-        val itemView: View = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
+        val itemView: View =
+            LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
         return QuizViewHolder(itemView)
     }
 

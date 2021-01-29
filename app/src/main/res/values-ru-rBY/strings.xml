@@ -16,8 +16,16 @@
     <string name="start_quiz">Начать викторину</string>
     <string name="correct_answers">Правильные ответы</string>
     <string name="total_questions">Всего вопросов</string>
-    <string name="checking_user_account">Проверка профиля...</string>
-    <string name="creating_account">Создание профиля...</string>
-    <string name="account_created">Профиль создан...</string>
-    <string name="logged_account">Вход выполнен...</string>
+    <string name="checking_user_account">Проверка профиля…</string>
+    <string name="creating_account">Создание профиля…</string>
+    <string name="account_created">Профиль создан…</string>
+    <string name="logged_account">Вход выполнен…</string>
+    <string name="coming_soon">Скоро</string>
+    <string name="loading_the_first">Загрузка первого вопроса</string>
+    <string name="no_answer">Без ответа</string>
+    <string name="correct">Правильно</string>
+    <string name="show_results">Показать результат</string>
+    <string name="error_loading">Ошибка загрузки</string>
+    <string name="wrong_right">Ошибка. Правильный вариант: %1$s</string>
+    <string name="percent">%1$s</string>
 </resources>

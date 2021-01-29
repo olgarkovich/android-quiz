@@ -55,15 +55,33 @@
         tools:layout="@layout/fragment_quiz">
         <action
             android:id="@+id/action_quizFragment_to_resultFragment"
-            app:destination="@id/resultFragment" />
+            app:destination="@id/resultFragment"
+            app:popUpTo="@id/detailFragment" />
         <argument
-            android:name="position"
+            android:name="quizId"
+            android:defaultValue="null"
+            app:argType="string" />
+        <argument
+            android:name="totalQuestions"
             android:defaultValue="0"
             app:argType="integer" />
+        <argument
+            android:name="quizName"
+            android:defaultValue="null"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/resultFragment"
         android:name="com.example.quiz.view.ResultFragment"
         android:label="fragment_result"
-        tools:layout="@layout/fragment_result" />
+        tools:layout="@layout/fragment_result">
+        <argument
+            android:name="quizId"
+            android:defaultValue="null"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_resultFragment_to_listFragment"
+            app:destination="@id/listFragment"
+            app:popUpTo="@id/listFragment" />
+    </fragment>
 </navigation>

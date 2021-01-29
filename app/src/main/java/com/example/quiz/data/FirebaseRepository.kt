@@ -7,17 +7,16 @@ import java.lang.Exception
 class FirebaseRepository(private val onFirestoreTaskComplete: OnFirestoreTaskComplete) {
 
     private val firebase = FirebaseFirestore.getInstance()
-    private val quizRef = firebase.collection("QuizList")
+    private val quizRef = firebase.collection("QuizList").whereEqualTo("visibility", "public")
 
     fun getQuizData() {
-        quizRef.get().addOnCompleteListener{ task ->
+        quizRef.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 task.result?.let { onFirestoreTaskComplete.quizListDataAdd(it.toObjects(Quiz::class.java)) }
             } else {
                 onFirestoreTaskComplete.onError(task.exception)
             }
         }
-
     }
 
     interface OnFirestoreTaskComplete {

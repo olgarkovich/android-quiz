@@ -1,8 +1,6 @@
 package com.example.quiz.view
 
-import android.icu.text.CaseMap
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,21 +13,28 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.example.quiz.R
+import com.example.quiz.*
 import com.example.quiz.viewmodel.QuizListViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class DetailFragment : Fragment(), View.OnClickListener {
 
     private lateinit var navController: NavController
-    private lateinit var quizListViewModel: QuizListViewModel
+    private lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var firebaseAuth: FirebaseAuth
+
     private var position = 0
+    private var quizId = ""
+    private var quizName = ""
+    private var totalQuestion = 0
 
     private lateinit var detailImage: ImageView
     private lateinit var detailTitle: TextView
     private lateinit var detailDesc: TextView
     private lateinit var detailDiff: TextView
     private lateinit var detailQuestion: TextView
-
+    private lateinit var detailScore: TextView
     private lateinit var button: Button
 
     override fun onCreateView(
@@ -50,6 +55,7 @@ class DetailFragment : Fragment(), View.OnClickListener {
         detailDesc = view.findViewById(R.id.details_desc)
         detailDiff = view.findViewById(R.id.details_difficulty_text)
         detailQuestion = view.findViewById(R.id.details_questions_text)
+        detailScore = view.findViewById(R.id.details_score_text)
         button = view.findViewById(R.id.details_start_btn)
 
         button.setOnClickListener(this)
@@ -61,7 +67,8 @@ class DetailFragment : Fragment(), View.OnClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        quizListViewModel = ViewModelProvider(requireActivity()).get(QuizListViewModel::class.java)
+        val quizListViewModel =
+            ViewModelProvider(requireActivity()).get(QuizListViewModel::class.java)
         quizListViewModel.getQuizListData().observe(viewLifecycleOwner, { quizList ->
             val quiz = quizList[position]
 
@@ -75,11 +82,51 @@ class DetailFragment : Fragment(), View.OnClickListener {
             detailDesc.text = quiz.desc
             detailDiff.text = quiz.level
             detailQuestion.text = quiz.questions.toString()
+
+            quizId = quizList[position].id
+            totalQuestion = quizList[position].questions
+            quizName = quizList[position].name
+
+            firebaseAuth = FirebaseAuth.getInstance()
+            firebaseFirestore = FirebaseFirestore.getInstance()
+
+            loadResultData()
         })
     }
 
+    private fun loadResultData() {
+        firebaseAuth.currentUser?.let {
+            firebaseFirestore.collection(QUIZ_LIST)
+                .document(quizId)
+                .collection(RESULTS)
+                .document(it.uid)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val results = task.result
+
+                        if (results != null && results.exists()) {
+
+                            val right = results.getLong(CORRECT)!!
+                            val wrong = results.getLong(WRONG)!!
+                            val no = results.getLong(MISSED)!!
+
+                            val percent = right.toFloat() / (right + wrong + no) * 100
+                            detailScore.text = getString(R.string.percent, percent.toInt().toString())
+                        } else {
+
+                        }
+                    }
+                }
+        }
+    }
+
     override fun onClick(v: View) {
-        val action = DetailFragmentDirections.actionDetailFragmentToQuizFragment(position)
+        val action = DetailFragmentDirections.actionDetailFragmentToQuizFragment(
+            quizId,
+            totalQuestion,
+            quizName
+        )
         navController.navigate(action)
     }
 }

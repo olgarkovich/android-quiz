@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.ResultFragment"
-    android:background="@color/colorPrimaryDark">
+    android:background="@color/colorPrimaryDark"
+    tools:context=".view.ResultFragment">
 
 
     <TextView
@@ -25,10 +25,14 @@
 
     <ProgressBar
         android:id="@+id/results_progress"
-        style="?android:attr/progressBarStyle"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="128dp"
         android:layout_height="128dp"
         android:layout_marginTop="64dp"
+        android:indeterminate="false"
+        android:indeterminateDrawable="@drawable/progress"
+        android:progress="100"
+        android:progressDrawable="@drawable/progress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/results_title" />
@@ -38,13 +42,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/work_sans"
-        tools:text="@tools:sample/us_zipcodes"
         android:textColor="@color/colorPrimary"
         android:textSize="26sp"
         app:layout_constraintBottom_toBottomOf="@+id/results_progress"
         app:layout_constraintEnd_toEndOf="@+id/results_progress"
         app:layout_constraintStart_toStartOf="@+id/results_progress"
-        app:layout_constraintTop_toTopOf="@+id/results_progress" />
+        app:layout_constraintTop_toTopOf="@+id/results_progress"
+        tools:text="@tools:sample/us_zipcodes" />
 
     <TextView
         android:id="@+id/results_correct"
@@ -52,10 +56,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="64dp"
+        android:fontFamily="@font/work_sans"
         android:text="@string/correct_answers"
         android:textColor="@color/colorLightText"
         android:textSize="16sp"
-        android:fontFamily="@font/work_sans"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/results_progress" />
 
@@ -65,10 +69,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
+        android:fontFamily="@font/work_sans"
         android:text="@string/wrong_answers"
         android:textColor="@color/colorLightText"
         android:textSize="16sp"
-        android:fontFamily="@font/work_sans"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/results_correct" />
 
@@ -78,10 +82,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
+        android:fontFamily="@font/work_sans"
         android:text="@string/questions_missed"
         android:textColor="@color/colorLightText"
         android:textSize="16sp"
-        android:fontFamily="@font/work_sans"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/results_wrong" />
 
@@ -90,10 +94,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
+        android:fontFamily="@font/work_sans"
         android:text="@string/na"
         android:textColor="@color/colorLightText"
         android:textSize="16sp"
-        android:fontFamily="@font/work_sans"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/results_correct" />
 
@@ -103,10 +107,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
+        android:fontFamily="@font/work_sans"
         android:text="@string/na"
         android:textColor="@color/colorLightText"
         android:textSize="16sp"
-        android:fontFamily="@font/work_sans"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/results_correct_text" />
 
@@ -116,10 +120,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
+        android:fontFamily="@font/work_sans"
         android:text="@string/na"
         android:textColor="@color/colorLightText"
         android:textSize="16sp"
-        android:fontFamily="@font/work_sans"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/results_wrong_text" />
 

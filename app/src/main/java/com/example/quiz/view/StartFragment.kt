@@ -14,17 +14,11 @@ import com.google.firebase.auth.FirebaseAuth
 
 class StartFragment : Fragment() {
 
-    private lateinit var startProgress: ProgressBar
-    private lateinit var startText: TextView
-
+    private lateinit var navController: NavController
     private lateinit var firebaseAuth: FirebaseAuth
 
-    private lateinit var navController: NavController
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private lateinit var startProgress: ProgressBar
+    private lateinit var startText: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
