@@ -271,7 +271,6 @@ class QuizFragment : Fragment(), View.OnClickListener {
         showNextBtn()
     }
 
-
     private fun showNextBtn() {
         if (currentQuestion - 1 == totalQuestions) {
             nextButton.text = getString(R.string.show_results)
